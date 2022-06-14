@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:5000/todos/';
+const baseURL = 'http://localhost:5000/todos';
 
 export const todoService = {
     getAll() {
@@ -13,9 +13,9 @@ export const todoService = {
         return axios.post(baseURL, todoDoc);
     },
     delete(todoTitle) {
-        return axios.delete(baseUrl + `/${todoTitle}`);
+        return axios.delete(baseURL + `/${todoTitle}`);
     },
     update(todoDoc) {
-        return axios.put(baseUrl, todoDoc);
+        return axios.put(baseURL, todoDoc);
     }
 }
