@@ -12,36 +12,70 @@ function deleteTask (task){
 
 function List() {    
     const [list, setList] = useState([]);
-    useEffect(() => {
+    const [search,setSearch] = useState("");
+    const [showButton,setShowButton] = useState(false);
+    function getAll(){
         todoService.getAll()
-            .then(response => {
-                setList(response.data.response);
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        .then(response => {
+            setList(response.data.response);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+    }
+    useEffect(() => {
+       getAll();
     });
     const navigate = useNavigate();
     function updateTask(task){
         console.log(task)
         navigate('/updateTask',{state:task});
     }
+    function makeQuery(e,search){
+        e.preventDefault();
+        todoService.getOne(search).then(response => {
+            if(!response.data.response){
+                alert('There is not todo with that title');
+            }
+            else{
+                console.log(response.data.response)
+                setList([]);
+                console.log(list)
+            }
+        })
+        .catch(error => {
+            console.log(error);
+        });
+        setShowButton(true);    
+        
+    }
     const listAll = () =>{
         return list.map(
-            (d) => <p key={d.todo}>
+            (d) => <li key={d.todo}>
                 {d.todo}
                  {d.priority}
                  {<button onClick={()=>{
                      updateTask(d)}}> Update Task </button>}
                  {<button onClick={()=>{
                      deleteTask(d)}} >Delete</button>}
-                 </p>)
+                 </li>)
     }
     return (
         <div>
+            <form onSubmit={(e)=>{makeQuery(e,search)}}>
+                <input
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    type="text"
+                    name="search"
+                    placeholder="search"
+                    required
+                />
+                <button> Search Task </button>
+            </form>
+            {showButton && <button onClick={()=>{getAll();setShowButton(false)}}>Back</button>}
             {listAll()}
         </div>
     );
 }
-
 export default List;
