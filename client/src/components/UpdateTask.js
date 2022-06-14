@@ -1,26 +1,28 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-function AddTask() {
-    const[title,setTitle] = useState("");
-    const[priority,setPriority] = useState("");
+function UpdateTask() {
+    const location = useLocation();
+    console.log(location);
+    const[priority,setPriority] = useState(location.state.priority);
+    const title=location.state.todo;
+
     const navigate = useNavigate();
     return (
+
         <form onSubmit={()=>{navigate('/')}}>
         <input
              value={title}
-             onChange={e => setTitle(e.target.value)}
-             placeholder="Title"
              type="text"
              name="title"
-             required
+             readonly
            />
             <input
              value={priority}
              onChange={e => setPriority(e.target.value)}
              placeholder="priority"
-             type="number"
-             name="p"
+             type="text"
+             name="priority"
              required
            />
         <button> Submit </button>
@@ -28,4 +30,4 @@ function AddTask() {
     );
 }
 
-export default AddTask;
+export default UpdateTask;

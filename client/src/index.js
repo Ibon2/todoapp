@@ -8,6 +8,7 @@ import {
   Routes,
   Route
 } from "react-router-dom";
+import UpdateTask from './components/UpdateTask';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -16,6 +17,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App/>} />
         <Route path='/addTask' element={<AddTask/>} />
+        <Route path='/updateTask' element={<UpdateTask/>}/>
       </Routes>
     </Router>
   </React.StrictMode>
