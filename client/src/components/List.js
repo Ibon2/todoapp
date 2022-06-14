@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { todoService } from "../services/todo.service";
+
 function deleteTask (task){
     console.log(task)
     if(task){
@@ -8,17 +10,24 @@ function deleteTask (task){
     
 };
 
-function List() {
-    
-    const [listTaks,setListTasks] = useState([{todo:"Task1",priority:0},
-            {todo:"Task2",priority:1}]);//should be the call to backend
+function List() {    
+    const [list, setList] = useState([]);
+    useEffect(() => {
+        todoService.getAll()
+            .then(response => {
+                setList(response.data.response);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    });
     const navigate = useNavigate();
     function updateTask(task){
         console.log(task)
         navigate('/updateTask',{state:task});
     }
     const listAll = () =>{
-        return listTaks.map(
+        return list.map(
             (d) => <p key={d.todo}>
                 {d.todo}
                  {d.priority}

@@ -1,10 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bp from 'body-parser';
+import cors from 'cors';
 import todoRouter from "./routers/todo.router.js";
 
 const app = express();
 
+app.use(cors());
 app.use(bp.json());
 app.use(bp.urlencoded({ extended: true }));
 
