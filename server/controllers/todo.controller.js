@@ -5,7 +5,7 @@ import { apiResponse } from './response.js';
 // @desc Get todos
 // @route GET /todos/
 const getTodos = asyncHandler(async(req, res) => {
-    const todos = await Todo.find();
+    const todos = await Todo.find({});
 
     if (todos === undefined) {
         apiResponse(res, false, 404, "No Todos found.");
@@ -15,20 +15,33 @@ const getTodos = asyncHandler(async(req, res) => {
     apiResponse(res, true, 200, "Returned all Todos.", todos);
 });
 
+// @desc Get todo
+// @route GET /todos/:todo
+const getTodo = asyncHandler(async(req, res) => {
+    const todo = await Todo.findOne({todo: req.params.todo}).exec();
+
+    if (todo === undefined) {
+        apiResponse(res, false, 404, "No Todo with inputted todo found.");
+        throw new Error("No Todo with inputted todo found.");
+    };
+
+    apiResponse(res, true, 200, "Returned Todo.", todo);
+});
+
 // @desc Add todo
 // @route POST /todos/
 const addTodo = asyncHandler(async(req, res) => {
-    const title = req.body.title;
-    const description = req.body.description;
+    const todo = req.body.todo;
+    const priority = req.body.priority;
 
-    if (!title || !description) {
+    if (!todo || !priority) {
         apiResponse(res, false, 400, "A required parameter is missing or incorrect.");
         throw new Error("Invalid input.");
     };
 
     const document = new Todo({
-        title: title,
-        description: description
+        todo: todo,
+        priority: priority
     });
 
     document.save((err) => {
@@ -40,7 +53,40 @@ const addTodo = asyncHandler(async(req, res) => {
     apiResponse(res, true, 201, "Todo inserted to database.", document);
 });
 
+// @desc Delete todo
+// @route DELETE /todos/:todo
+const deleteTodo = asyncHandler(async(req, res) => {
+    const todo = await Todo.findOne({ todo: req.params.todo });
+
+    if (!todo) {
+        apiResponse(res, false, 404, "No Todo with inputted title found.");
+        throw new Error("No Todo with inputted title found.");
+    };
+
+    await todo.remove();
+    apiResponse(res, true, 200, "Deleted Todo.", todo);
+});
+
+
+// @desc Update todo
+// @route PUT /todos/
+const updateTodo = asyncHandler(async(req, res) => {
+    let todo = await Todo.findOneAndUpdate({ todo: req.body.todo }, { priority: req.body.priority });
+
+    if (!todo) {
+        apiResponse(res, false, 404, "No Todo with inputted title found.");
+        throw new Error("No Todo with inputted title found.");
+    };
+
+    todo = await Todo.findOne({ todo: req.body.todo });
+
+    apiResponse(res, true, 200, "Updated Todo.", todo);
+});
+
 export {
     getTodos,
-    addTodo
+    getTodo,
+    addTodo,
+    deleteTodo,
+    updateTodo
 };

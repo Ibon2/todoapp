@@ -1,8 +1,12 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import bp from 'body-parser';
 import todoRouter from "./routers/todo.router.js";
 
 const app = express();
+
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.send("Welcome to the Todo App server");
