@@ -15,7 +15,7 @@ function UpdateTask() {
              value={title}
              type="text"
              name="title"
-             readonly
+             readOnly
            />
             <input
              value={priority}
