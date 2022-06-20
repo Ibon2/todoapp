@@ -68,10 +68,11 @@ function List() {
     
     function deleteTask (task){
         todoService.delete(task.todo)
-            .catch(res => {
+            .then(res => {
                 console.log(res);
+                setIsLoaded(false);
             })
-            .then(err => {
+            .catch(err => {
                 console.log(err);
             });
     };}
