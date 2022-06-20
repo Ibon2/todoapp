@@ -2,18 +2,9 @@ import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { todoService } from "../services/todo.service";
 
-function deleteTask (task){
-    todoService.delete(task.todo)
-        .catch(res => {
-            console.log(res);
-        })
-        .then(err => {
-            console.log(err);
-        });
-};
-
 function List() {
     const [list, setList] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
     const [search,setSearch] = useState("");
     const [showButton,setShowButton] = useState(false);
 
@@ -28,12 +19,16 @@ function List() {
     }
 
     useEffect(() => {
-        getAll();
+        if (!isLoaded) {
+            getAll();
+        };
+        setIsLoaded(true);
     });
 
     const navigate = useNavigate();
     function updateTask(task){
         navigate('/updateTask',{state:task});
+        setIsLoaded(false);
     }
     function makeQuery(e,search){
         e.preventDefault();
@@ -70,7 +65,17 @@ function List() {
                 </button>}
             </li>
         )
-    }
+    
+    function deleteTask (task){
+        todoService.delete(task.todo)
+            .catch(res => {
+                console.log(res);
+            })
+            .then(err => {
+                console.log(err);
+            });
+    };}
+
     return (
         <div>
             <form onSubmit={(e)=>{makeQuery(e,search)}}>
