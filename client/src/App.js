@@ -9,9 +9,10 @@ function App() {
     <button onClick={addTask}>addTask</button>
   }
   return (
-    <div>
+    <div className='main'>
+      <h1>Todo App</h1>
         <List/>
-        <button onClick={addTask}>addTask</button>
+        <button className='button add' onClick={addTask}>Add Todo</button>
     </div>
   );
 }

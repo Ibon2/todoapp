@@ -1,6 +1,8 @@
 import { useState,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { todoService } from "../services/todo.service";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 
 function List() {
     const [list, setList] = useState([]);
@@ -49,20 +51,15 @@ function List() {
     }
     const listAll = () =>{
         return list.map(d => 
-            <li key={d.todo}>
-                {d.todo}
-                {d.priority}
+            <li className="list-item" key={d.todo}>
+                {d.todo} pr. {d.priority}
+                {
+                    <FontAwesomeIcon className="icon" onClick={()=>{updateTask(d)}} icon={faPen} />
+                }
 
-                {<button
-                    onClick={()=>{updateTask(d)}}
-                >
-                    Update Task
-                </button>}
-
-                {<button onClick={()=>{deleteTask(d)}}
-                >
-                    Delete
-                </button>}
+                {
+                    <FontAwesomeIcon className="icon" onClick={()=>{deleteTask(d)}} icon={faTrash} />
+                }
             </li>
         )
     
@@ -80,17 +77,23 @@ function List() {
     return (
         <div>
             <form onSubmit={(e)=>{makeQuery(e,search)}}>
-                <input
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
-                    type="text"
-                    name="search"
-                    placeholder="search"
-                    required
-                />
-                <button> Search Task </button>
+                <div className="search">
+                    <input
+                        value={search}
+                        className="search-bar"
+                        onChange={e => setSearch(e.target.value)}
+                        type="text"
+                        name="search"
+                        placeholder="search"
+                        required
+                    />
+                    <button className="button"> Search Task </button>
+                </div>
             </form>
             {showButton && <button onClick={()=>{getAll();setShowButton(false)}}>Back</button>}
+            {list.length === 0 && 
+                <h3 style={{textAlign: "center"}}>No todos</h3>
+            }
             {listAll()}
         </div>
     );

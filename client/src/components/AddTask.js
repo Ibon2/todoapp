@@ -27,25 +27,31 @@ function AddTask() {
     }
 
     return (
+      <div className="main">
+        <h1>Add a new Todo</h1>
         <form onSubmit={(e)=>handleSumit(e)}>
-        <input
-             value={title}
-             onChange={e => setTitle(e.target.value)}
-             placeholder="Title"
-             type="text"
-             name="title"
-             required
-           />
-            <input
-             value={priority}
-             onChange={e => setPriority(e.target.value)}
-             placeholder="priority"
-             type="number"
-             name="p"
-             required
-           />
-        <button> Submit </button>
+          <input
+              value={title}
+              className="search-bar add2"
+              onChange={e => setTitle(e.target.value)}
+              placeholder="Title"
+              type="text"
+              name="title"
+              required
+            />
+              <input
+              value={priority}
+              className="search-bar add2"
+              onChange={e => setPriority(e.target.value)}
+              placeholder="priority"
+              type="number"
+              name="p"
+              required
+            />
+          <button className="button add add2"> Submit </button>
         </form>
+      </div>
+        
     );
 }
 
