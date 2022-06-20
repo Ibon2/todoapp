@@ -29,24 +29,28 @@ function UpdateTask() {
     };
 
     return (
-
-        <form onSubmit={(e)=>handleSubmit(e)}>
-          <input
-             value={title}
-             type="text"
-             name="title"
-             readOnly
-           />
-          <input
-             value={priority}
-             onChange={e => setPriority(e.target.value)}
-             placeholder="priority"
-             type="number"
-             name="priority"
-             required
-           />
-        <button> Submit </button>
-        </form>
+        <div className="main">
+          <h1>Update a Todo</h1>
+          <form onSubmit={(e)=>handleSubmit(e)}>
+            <input
+              value={title}
+              className="search-bar add2"
+              type="text"
+              name="title"
+              readOnly
+            />
+            <input
+              value={priority}
+              onChange={e => setPriority(e.target.value)}
+              placeholder="priority"
+              className="search-bar add2"
+              type="number"
+              name="priority"
+              required
+            />
+          <button className="button add add2"> Submit </button>
+          </form>
+        </div>
     );
 }
 
