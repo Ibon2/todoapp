@@ -1,9 +1,6 @@
-
 import './App.css';
 import List from './components/List.js'
-import AddTask from './components/AddTask.js'
-import {  useNavigate} from "react-router-dom";
-import { useState } from 'react';
+import {  useNavigate } from "react-router-dom";
 
 function App() {
   const navigate = useNavigate();
@@ -12,7 +9,7 @@ function App() {
     <button onClick={addTask}>addTask</button>
   }
   return (
-    <div >
+    <div>
         <List/>
         <button onClick={addTask}>addTask</button>
     </div>

@@ -1,17 +1,18 @@
-import { useState,useEffect,useRef } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useState,useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { todoService } from "../services/todo.service";
 
 function deleteTask (task){
-    console.log(task)
-    if(task){
-        console.log("En delete: "+ task.todo + " "+task.priority);
-    }
-    
+    todoService.delete(task.todo)
+        .catch(res => {
+            console.log(res);
+        })
+        .then(err => {
+            console.log(err);
+        });
 };
 
 function List() {
-    const receivedData = useRef(false);
     const [list, setList] = useState([]);
     const [search,setSearch] = useState("");
     const [showButton,setShowButton] = useState(false);
@@ -27,15 +28,11 @@ function List() {
     }
 
     useEffect(() => {
-        if (receivedData.current === false) {
-            getAll();
-        }
-        receivedData.current = true;
+        getAll();
     });
 
     const navigate = useNavigate();
     function updateTask(task){
-        console.log(task)
         navigate('/updateTask',{state:task});
     }
     function makeQuery(e,search){
@@ -56,15 +53,23 @@ function List() {
         setShowButton(true);
     }
     const listAll = () =>{
-        return list.map(
-            (d) => <li key={d.todo}>
+        return list.map(d => 
+            <li key={d.todo}>
                 {d.todo}
-                 {d.priority}
-                 {<button onClick={()=>{
-                     updateTask(d)}}> Update Task </button>}
-                 {<button onClick={()=>{
-                     deleteTask(d)}} >Delete</button>}
-                 </li>)
+                {d.priority}
+
+                {<button
+                    onClick={()=>{updateTask(d)}}
+                >
+                    Update Task
+                </button>}
+
+                {<button onClick={()=>{deleteTask(d)}}
+                >
+                    Delete
+                </button>}
+            </li>
+        )
     }
     return (
         <div>
