@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState,useEffect,useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { todoService } from "../services/todo.service";
 
@@ -10,10 +10,12 @@ function deleteTask (task){
     
 };
 
-function List() {    
+function List() {
+    const receivedData = useRef(false);
     const [list, setList] = useState([]);
     const [search,setSearch] = useState("");
     const [showButton,setShowButton] = useState(false);
+
     function getAll(){
         todoService.getAll()
         .then(response => {
@@ -23,9 +25,14 @@ function List() {
             console.log(error);
         });
     }
+
     useEffect(() => {
-       getAll();
+        if (receivedData.current === false) {
+            getAll();
+        }
+        receivedData.current = true;
     });
+
     const navigate = useNavigate();
     function updateTask(task){
         console.log(task)
@@ -38,16 +45,15 @@ function List() {
                 alert('There is not todo with that title');
             }
             else{
-                console.log(response.data.response)
-                setList([]);
-                console.log(list)
+                const todo = [response.data.response];
+                setList(todo);
+                console.log(list);
             }
         })
         .catch(error => {
             console.log(error);
         });
-        setShowButton(true);    
-        
+        setShowButton(true);
     }
     const listAll = () =>{
         return list.map(
